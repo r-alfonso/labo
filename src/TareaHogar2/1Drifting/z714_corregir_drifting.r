@@ -99,6 +99,53 @@ AgregarVariables  <- function( dataset )
 
   #Aqui debe usted agregar sus propias nuevas variables
 
+  #combino los margenes 
+  dataset[ , mfe_ganancia_margen_banco := rowSums( cbind( mactivos_margen,  mpasivos_margen) , na.rm=TRUE ) ] #11
+    
+  #combino los montos de todas las cuentas del cliente "FE muy buena"
+  dataset[ , mfe_montos_cuentas := rowSums( cbind(mcuenta_corriente_adicional, mcuenta_corriente, mcaja_ahorro, mcaja_ahorro_adicional, mcaja_ahorro_dolares) , na.rm=TRUE ) ] #2
+    
+  #combino la cantidad de prestamos "FE regular"
+  dataset[ , cfe_cantidad_prestamos := rowSums( cbind( cprestamos_personales, cprestamos_prendarios, cprestamos_hipotecarios) , na.rm=TRUE ) ] #6
+    
+  #combino el total de deuda "FE muy buena"
+  dataset[ , mfe_total_deuda := rowSums( cbind( mprestamos_personales, mprestamos_prendarios, mprestamos_hipotecarios) , na.rm=TRUE ) ] #4
+   
+  #combino los montos de plazo fijo vigentes
+  dataset[ , mfe_montos_plazos_fijos := rowSums( cbind( mplazo_fijo_dolares, mplazo_fijo_pesos) , na.rm=TRUE ) ]
+   
+  #combino los montos de inversiones
+  dataset[ , mfe_montos_inversion := rowSums( cbind( minversion1_pesos, minversion1_dolares, minversion2) , na.rm=TRUE ) ]
+    
+  #combino la cantidad de seguros
+  dataset[ , cfe_cantidad_seguros := rowSums( cbind( cseguro_vida, cseguro_auto, cseguro_vivienda, cseguro_accidentes_personales) , na.rm=TRUE ) ]
+   
+  #combino las acreditaciones del cliente
+  dataset[ , mfe_acreditaciones := rowSums( cbind( mpayroll, mpayroll2) , na.rm=TRUE ) ]
+
+  #combinaciones sobre antiguedad
+  dataset[ , mfe_avg_mes_cuentas := mcuentas_saldo / cliente_antiguedad ] #"FE muy buena"
+  dataset[ , mfe_avg_mes_ganancia_margen_banco := mfe_ganancia_margen_banco /  cliente_antiguedad ] #7
+  dataset[ , mfe_avg_mes_montos_cuentas := mfe_montos_cuentas /  cliente_antiguedad ] #"FE buena"
+  dataset[ , mfe_avg_mes_total_deuda := mfe_total_deuda /  cliente_antiguedad ] #"FE buena"
+
+  #combinaciones sobre edad clientes
+  dataset[ , mfe_avg_edad_cuentas := mcuentas_saldo / cliente_edad ] #"FE muy buena"
+  dataset[ , mfe_avg_edad_ganancia_margen_banco := mfe_ganancia_margen_banco /  cliente_edad ]
+  dataset[ , mfe_avg_edad_montos_cuentas := mfe_montos_cuentas /  cliente_edad ] #"FE muy buena"
+  dataset[ , mfe_avg_edad_total_deuda := mfe_total_deuda /  cliente_edad ]
+  dataset[ , mfe_avg_edad_acreditacione := mfe_acreditaciones /  cliente_edad ]
+
+  #combino las comisiones sobre la edad, la antiguedad y los montos en cuentas
+  dataset[ , mfe_comisiones_mcuentas := mcomisiones / mcuentas_saldo ] #"FE regular"
+  dataset[ , mfe_avg_edad_comisiones := mcomisiones / cliente_edad ]
+  dataset[ , mfe_avg_mes_comisiones := mcomisiones / cliente_antiguedad ]
+  
+  
+  
+  
+  
+  
   #valvula de seguridad para evitar valores infinitos
   #paso los infinitos a NULOS
   infinitos      <- lapply(names(dataset),function(.name) dataset[ , sum(is.infinite(get(.name)))])
