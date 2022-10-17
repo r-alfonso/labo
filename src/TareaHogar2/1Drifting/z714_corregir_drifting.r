@@ -100,16 +100,16 @@ AgregarVariables  <- function( dataset )
   #Aqui debe usted agregar sus propias nuevas variables
 
   #combino los margenes 
-  dataset[ , mfe_ganancia_margen_banco := rowSums( cbind( mactivos_margen,  mpasivos_margen) , na.rm=TRUE ) ] #11
+  dataset[ , mfe_ganancia_margen_banco := rowSums( cbind( mactivos_margen,  mpasivos_margen) , na.rm=TRUE ) ]
     
   #combino los montos de todas las cuentas del cliente "FE muy buena"
-  dataset[ , mfe_montos_cuentas := rowSums( cbind(mcuenta_corriente_adicional, mcuenta_corriente, mcaja_ahorro, mcaja_ahorro_adicional, mcaja_ahorro_dolares) , na.rm=TRUE ) ] #2
+  dataset[ , mfe_montos_cuentas := rowSums( cbind(mcuenta_corriente_adicional, mcuenta_corriente, mcaja_ahorro, mcaja_ahorro_adicional, mcaja_ahorro_dolares) , na.rm=TRUE ) ]
     
   #combino la cantidad de prestamos "FE regular"
-  dataset[ , cfe_cantidad_prestamos := rowSums( cbind( cprestamos_personales, cprestamos_prendarios, cprestamos_hipotecarios) , na.rm=TRUE ) ] #6
+  dataset[ , cfe_cantidad_prestamos := rowSums( cbind( cprestamos_personales, cprestamos_prendarios, cprestamos_hipotecarios) , na.rm=TRUE ) ]
     
   #combino el total de deuda "FE muy buena"
-  dataset[ , mfe_total_deuda := rowSums( cbind( mprestamos_personales, mprestamos_prendarios, mprestamos_hipotecarios) , na.rm=TRUE ) ] #4
+  dataset[ , mfe_total_deuda := rowSums( cbind( mprestamos_personales, mprestamos_prendarios, mprestamos_hipotecarios) , na.rm=TRUE ) ]
    
   #combino los montos de plazo fijo vigentes
   dataset[ , mfe_montos_plazos_fijos := rowSums( cbind( mplazo_fijo_dolares, mplazo_fijo_pesos) , na.rm=TRUE ) ]
@@ -125,7 +125,7 @@ AgregarVariables  <- function( dataset )
 
   #combinaciones sobre antiguedad
   dataset[ , mfe_avg_mes_cuentas := mcuentas_saldo / cliente_antiguedad ] #"FE muy buena"
-  dataset[ , mfe_avg_mes_ganancia_margen_banco := mfe_ganancia_margen_banco /  cliente_antiguedad ] #7
+  dataset[ , mfe_avg_mes_ganancia_margen_banco := mfe_ganancia_margen_banco /  cliente_antiguedad ]
   dataset[ , mfe_avg_mes_montos_cuentas := mfe_montos_cuentas /  cliente_antiguedad ] #"FE buena"
   dataset[ , mfe_avg_mes_total_deuda := mfe_total_deuda /  cliente_antiguedad ] #"FE buena"
 
@@ -140,10 +140,6 @@ AgregarVariables  <- function( dataset )
   dataset[ , mfe_comisiones_mcuentas := mcomisiones / mcuentas_saldo ] #"FE regular"
   dataset[ , mfe_avg_edad_comisiones := mcomisiones / cliente_edad ]
   dataset[ , mfe_avg_mes_comisiones := mcomisiones / cliente_antiguedad ]
-  
-  
-  
-  
   
   
   #valvula de seguridad para evitar valores infinitos
